@@ -208,6 +208,9 @@ struct GlobalShortcut: Equatable, Hashable {
     // E opens the latest capture in the editor, beside the capture shortcut.
     static let screenshotLastCaptureDefault = GlobalShortcut(keyCode: Int64(kVK_ANSI_E),
                                                              modifiers: [.control, .option, .command])
+    // A for actions: the selection bar, on the free control-option-command layer.
+    static let selectionBarDefault = GlobalShortcut(keyCode: Int64(kVK_ANSI_A),
+                                                    modifiers: [.control, .option, .command])
     // H opens capture history, on the same free control-option-command layer.
     static let recentCapturesDefault = GlobalShortcut(keyCode: Int64(kVK_ANSI_H),
                                                       modifiers: [.control, .option, .command])
@@ -724,6 +727,7 @@ enum GlobalShortcutRole: CaseIterable, Identifiable {
     case keyboardBrightnessIncrease
     case pointerNextDisplay
     case notch
+    case selectionBar
 
     var id: String { storageKey }
 
@@ -759,6 +763,7 @@ enum GlobalShortcutRole: CaseIterable, Identifiable {
         case .keyboardBrightnessIncrease: return DefaultsKey.keyboardBrightnessIncreaseShortcut
         case .pointerNextDisplay: return DefaultsKey.pointerDisplayShortcut
         case .notch: return DefaultsKey.notchShortcut
+        case .selectionBar: return DefaultsKey.selectionBarShortcut
         }
     }
 
@@ -794,6 +799,7 @@ enum GlobalShortcutRole: CaseIterable, Identifiable {
         case .keyboardBrightnessIncrease: return .keyboardBrightnessIncreaseDefault
         case .pointerNextDisplay: return .pointerNextDisplayDefault
         case .notch: return .notchDefault
+        case .selectionBar: return .selectionBarDefault
         }
     }
 
@@ -858,6 +864,7 @@ enum GlobalShortcutRole: CaseIterable, Identifiable {
             return FeatureStrings.brightness(L10n.shared.language).keyboardBrightnessIncrease
         case .pointerNextDisplay: return PointerDisplayStrings.localized(L10n.shared.language).title
         case .notch: return FeatureStrings.notch(L10n.shared.language).title
+        case .selectionBar: return FeatureStrings.selectionBar(L10n.shared.language).title
         }
     }
 
@@ -916,6 +923,7 @@ enum GlobalShortcutRole: CaseIterable, Identifiable {
             return [DefaultsKey.keyboardBrightnessShortcutsEnabled]
         case .pointerNextDisplay: return [DefaultsKey.pointerDisplayEnabled]
         case .notch: return [DefaultsKey.notchEnabled, DefaultsKey.notchShortcutEnabled]
+        case .selectionBar: return [DefaultsKey.selectionBarEnabled, DefaultsKey.selectionBarShortcutEnabled]
         }
     }
 
@@ -948,6 +956,7 @@ enum GlobalShortcutRole: CaseIterable, Identifiable {
         case .keyboardBrightnessDecrease, .keyboardBrightnessIncrease: return .brightness
         case .pointerNextDisplay: return .windowLayout
         case .notch: return .notch
+        case .selectionBar: return .selectionBar
         }
     }
 

@@ -13,6 +13,7 @@ struct MouseSettings: View {
     @ObservedObject private var smoothScroll = SmoothScrollService.shared
     @ObservedObject private var mouseNavigation = MouseNavigationService.shared
     @ObservedObject private var middleClick = MiddleClickService.shared
+    @ObservedObject private var selectionBar = SelectionBarService.shared
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage(DefaultsKey.scrollInverterEnabled) private var invertVertical = false
     @AppStorage(DefaultsKey.scrollInverterHorizontalEnabled) private var invertHorizontal = false
@@ -40,6 +41,7 @@ struct MouseSettings: View {
     @AppStorage(DefaultsKey.middleClickEnabled) private var middleClickEnabled = false
     @AppStorage(DefaultsKey.middleClickTapFingers) private var middleClickTapFingers = 0
     @AppStorage(DefaultsKey.selectionBarEnabled) private var selectionBarEnabled = false
+    @AppStorage(DefaultsKey.selectionBarShortcutEnabled) private var selectionBarShortcutEnabled = false
     @AppStorage(DefaultsKey.selectionBarDoubleClickEnabled) private var selectionBarDoubleClickEnabled = true
     @AppStorage(DefaultsKey.mouseClickDebounceEnabled) private var mouseClickDebounceEnabled = false
     @AppStorage(DefaultsKey.mouseClickDebounceWindowMs) private var mouseClickDebounceWindow =
@@ -524,6 +526,21 @@ struct MouseSettings: View {
                     }
             }
             if selectionBarEnabled {
+                VStack(alignment: .leading, spacing: 6) {
+                    Toggle(text.shortcut, isOn: $selectionBarShortcutEnabled)
+                        .onChange(of: selectionBarShortcutEnabled) { _, _ in
+                            SelectionBarService.shared.syncWithPreferences()
+                        }
+                    ShortcutPreferenceRow(role: .selectionBar, isEnabled: selectionBarShortcutEnabled) {
+                        SelectionBarService.shared.syncWithPreferences()
+                    }
+                    if selectionBarShortcutEnabled, selectionBar.shortcutRegistrationFailed {
+                        Text(l10n.s.shortcutUnavailable)
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                    }
+                }
+                .padding(.leading, settingsRowTextInset)
                 DisclosureGroup {
                     VStack(alignment: .leading, spacing: 6) {
                         Toggle(text.doubleClick, isOn: $selectionBarDoubleClickEnabled)

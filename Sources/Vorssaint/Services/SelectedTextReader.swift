@@ -29,9 +29,9 @@ enum SelectedTextReader {
 
     /// Reads the selection of the focused element in the app `processID`.
     /// Blocking, so callers run it off the main thread. `details` adds the
-    /// editable state and the geometry, which cost more calls. A selection
-    /// with no text gets no details.
-    static func read(processID: pid_t, details: Bool = false) -> Selection? {
+    /// editable state and the geometry, which cost more calls. When
+    /// `detailsForCaret` is false, a selection with no text gets no details.
+    static func read(processID: pid_t, details: Bool = false, detailsForCaret: Bool = true) -> Selection? {
         guard AXIsProcessTrusted() else { return nil }
         // Asked of the app, not of the system-wide element: a timeout set on
         // the system-wide element is the DEFAULT FOR THE WHOLE PROCESS, and
@@ -54,7 +54,8 @@ enum SelectedTextReader {
             text = copyString(focused, "AXStringForTextMarkerRange", range)
         }
         guard let text else { return nil }
-        guard details, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+        guard details,
+              detailsForCaret || !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return Selection(text: text, isEditable: false, bounds: nil, elementFrame: nil,
                              fromTextMarkers: markerRange != nil)
         }

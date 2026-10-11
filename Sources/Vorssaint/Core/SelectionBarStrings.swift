@@ -8,6 +8,8 @@ struct SelectionBarStrings {
     let caption: String
     let copy: String
     let tools: String
+    let paste: String
+    let shortcut: String
     let doubleClick: String
 }
 
@@ -39,6 +41,8 @@ extension SelectionBarStrings {
         caption: "Select text with the mouse and a small bar of actions appears next to it. Apps that do not share their selection with macOS do not show it.",
         copy: "Copy",
         tools: "Tools on the bar",
+        paste: "Paste",
+        shortcut: "Open with a shortcut",
         doubleClick: "Open with a double click"
     )
 
@@ -47,6 +51,8 @@ extension SelectionBarStrings {
         caption: "Selecione um texto com o mouse e uma pequena barra de ações aparece ao lado. Apps que não compartilham a seleção com o macOS não a mostram.",
         copy: "Copiar",
         tools: "Ferramentas na barra",
+        paste: "Colar",
+        shortcut: "Abrir com um atalho",
         doubleClick: "Abrir com um clique duplo"
     )
 
@@ -55,6 +61,8 @@ extension SelectionBarStrings {
         caption: "Fareyle metin seçtiğinizde yanında küçük bir eylem çubuğu görünür. Seçimini macOS ile paylaşmayan uygulamalarda görünmez.",
         copy: "Kopyala",
         tools: "Çubuktaki araçlar",
+        paste: "Yapıştır",
+        shortcut: "Kısayolla aç",
         doubleClick: "Çift tıklamayla aç"
     )
 
@@ -63,6 +71,8 @@ extension SelectionBarStrings {
         caption: "Выделите текст мышью, и рядом появится небольшая панель действий. В приложениях, которые не сообщают macOS о выделении, она не появляется.",
         copy: "Скопировать",
         tools: "Инструменты на панели",
+        paste: "Вставить",
+        shortcut: "Открывать сочетанием клавиш",
         doubleClick: "Открывать двойным щелчком"
     )
 
@@ -71,6 +81,8 @@ extension SelectionBarStrings {
         caption: "Selecciona texto con el ratón y aparece una pequeña barra de acciones a su lado. Las apps que no comparten su selección con macOS no la muestran.",
         copy: "Copiar",
         tools: "Herramientas en la barra",
+        paste: "Pegar",
+        shortcut: "Abrir con un atajo",
         doubleClick: "Abrir con doble clic"
     )
 
@@ -79,6 +91,8 @@ extension SelectionBarStrings {
         caption: "Vyberte text myšou a vedľa neho sa zobrazí malý panel akcií. Aplikácie, ktoré svoj výber nezdieľajú s macOS, ho nezobrazia.",
         copy: "Kopírovať",
         tools: "Nástroje na paneli",
+        paste: "Vložiť",
+        shortcut: "Otvoriť skratkou",
         doubleClick: "Otvoriť dvojitým kliknutím"
     )
 
@@ -87,6 +101,8 @@ extension SelectionBarStrings {
         caption: "Markiere Text mit der Maus, und daneben erscheint eine kleine Leiste mit Aktionen. Apps, die ihre Auswahl nicht mit macOS teilen, zeigen sie nicht.",
         copy: "Kopieren",
         tools: "Werkzeuge in der Leiste",
+        paste: "Einsetzen",
+        shortcut: "Mit einem Kurzbefehl öffnen",
         doubleClick: "Mit einem Doppelklick öffnen"
     )
 
@@ -95,6 +111,8 @@ extension SelectionBarStrings {
         caption: "Sélectionnez du texte à la souris et une petite barre d’actions apparaît à côté. Les apps qui ne partagent pas leur sélection avec macOS ne l’affichent pas.",
         copy: "Copier",
         tools: "Outils de la barre",
+        paste: "Coller",
+        shortcut: "Ouvrir avec un raccourci",
         doubleClick: "Ouvrir avec un double-clic"
     )
 
@@ -103,6 +121,8 @@ extension SelectionBarStrings {
         caption: "Seleziona del testo con il mouse e accanto compare una piccola barra di azioni. Le app che non condividono la selezione con macOS non la mostrano.",
         copy: "Copia",
         tools: "Strumenti nella barra",
+        paste: "Incolla",
+        shortcut: "Apri con una scorciatoia",
         doubleClick: "Apri con un doppio clic"
     )
 
@@ -111,6 +131,8 @@ extension SelectionBarStrings {
         caption: "マウスでテキストを選択すると、その横に小さなアクションバーが表示されます。選択内容をmacOSに伝えないAppでは表示されません。",
         copy: "コピー",
         tools: "バーに表示するツール",
+        paste: "ペースト",
+        shortcut: "ショートカットで開く",
         doubleClick: "ダブルクリックで開く"
     )
 
@@ -119,6 +141,8 @@ extension SelectionBarStrings {
         caption: "마우스로 텍스트를 선택하면 옆에 작은 동작 막대가 나타납니다. 선택 내용을 macOS와 공유하지 않는 앱에서는 나타나지 않습니다.",
         copy: "복사",
         tools: "막대에 표시할 도구",
+        paste: "붙여넣기",
+        shortcut: "단축키로 열기",
         doubleClick: "두 번 클릭하여 열기"
     )
 
@@ -127,6 +151,8 @@ extension SelectionBarStrings {
         caption: "用鼠标选择文本后，旁边会出现一个小操作栏。不向 macOS 提供所选内容的 App 中不会出现。",
         copy: "拷贝",
         tools: "选择栏中的工具",
+        paste: "粘贴",
+        shortcut: "用快捷键打开",
         doubleClick: "连按两次打开"
     )
 
@@ -135,6 +161,8 @@ extension SelectionBarStrings {
         caption: "用滑鼠選取文字後，旁邊會出現一個小動作列。不向 macOS 提供選取內容的 App 中不會出現。",
         copy: "拷貝",
         tools: "選取列中的工具",
+        paste: "貼上",
+        shortcut: "使用快速鍵打開",
         doubleClick: "按兩下打開"
     )
 
@@ -143,6 +171,8 @@ extension SelectionBarStrings {
         caption: "用滑鼠選取文字後，旁邊會出現一個小動作列。不向 macOS 提供選取內容的 App 中不會出現。",
         copy: "拷貝",
         tools: "選取列中的工具",
+        paste: "貼上",
+        shortcut: "使用快速鍵打開",
         doubleClick: "按兩下打開"
     )
 
@@ -151,6 +181,8 @@ extension SelectionBarStrings {
         caption: "Виділіть текст мишею, і поруч з’явиться невелика панель дій. У програмах, які не повідомляють macOS про виділення, вона не з’являється.",
         copy: "Скопіювати",
         tools: "Інструменти на панелі",
+        paste: "Вставити",
+        shortcut: "Відкривати сполученням клавіш",
         doubleClick: "Відкривати подвійним клацанням"
     )
 }

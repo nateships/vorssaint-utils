@@ -78,9 +78,21 @@ enum PointerInputFeatureTests {
                         && SelectionBarSupport.offers("selection.count", isEditable: false),
                      "selection bar: rows that do not type stay on read only text")
 
-        suite.expect(SelectionBarSupport.shows("word") && !SelectionBarSupport.shows("")
-                        && !SelectionBarSupport.shows(String(repeating: "a", count: SelectionBarSupport.maximumLength + 1)),
-                     "selection bar: no bar for an empty selection or one the size of a document")
+        suite.expect(SelectionBarSupport.content(text: "word", isEditable: false, offersPaste: false) == .selection
+                        && SelectionBarSupport.content(text: "word", isEditable: true, offersPaste: true) == .selection,
+                     "selection bar: selected text always gets the selection tools")
+        suite.expect(SelectionBarSupport.content(text: "", isEditable: true, offersPaste: true) == .paste,
+                     "selection bar: an editable field with nothing selected gets the paste tools when asked")
+        suite.expect(SelectionBarSupport.content(text: "", isEditable: true, offersPaste: false) == .nothing,
+                     "selection bar: a drag that selected nothing shows nothing")
+        suite.expect(SelectionBarSupport.content(text: "", isEditable: false, offersPaste: true) == .nothing,
+                     "selection bar: read only text with nothing selected shows nothing, even on a double click")
+        suite.expect(SelectionBarSupport.content(text: String(repeating: "a", count: SelectionBarSupport.maximumLength + 1),
+                                                 isEditable: true, offersPaste: true) == .nothing,
+                     "selection bar: a selection the size of a document shows nothing")
+        suite.expect(SelectionBarSupport.isUsable(CGRect(x: 10, y: 10, width: 0, height: 18))
+                        && !SelectionBarSupport.isUsable(.zero),
+                     "selection bar: a caret rectangle places the bar, an empty one does not")
 
         suite.expect(SelectionBarSupport.enabledActionIDs(nil) == Set(SelectionBarSupport.actionIDs),
                      "selection bar: every tool is on until the person chooses")

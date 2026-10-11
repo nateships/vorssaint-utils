@@ -28,9 +28,10 @@ enum SelectionBarSupport {
     }
 
     /// Some apps give an empty or absurd rectangle for the selection. The bar
-    /// ignores those.
+    /// ignores those. A caret has no width, so a rectangle of zero width with a
+    /// height is kept.
     static func isUsable(_ rect: CGRect?) -> Bool {
-        guard let rect, rect.width > 0, rect.height > 0 else { return false }
+        guard let rect, rect.width >= 0, rect.height > 0 else { return false }
         return rect.width < 20_000 && rect.height < 20_000
     }
 
@@ -54,12 +55,24 @@ enum SelectionBarSupport {
     /// Every tool the bar can show, in bar order. Each one still appears only
     /// when it applies to the selection.
     static let actionIDs = ["copy", "selection.cleanLink", "selection.upper", "selection.lower",
-                            "selection.titleCase", "selection.shelf", "selection.count"]
+                            "selection.titleCase", "selection.shelf", "selection.count",
+                            "paste", "pastePlain", "clipboardHistory"]
 
-    /// True when the bar has tools for the trimmed selection `text`. A
-    /// selection the size of a document gets no bar.
-    static func shows(_ text: String) -> Bool {
-        !text.isEmpty && text.count <= maximumLength
+    /// What the bar shows for what was read.
+    enum Content: Equatable {
+        /// Tools for the selected text.
+        case selection
+        /// Paste tools at the caret, for an editable field with nothing selected.
+        case paste
+        case nothing
+    }
+
+    /// `text` is the trimmed selection. Paste tools need an editable field
+    /// and a request for them: the shortcut, or a double click that selected
+    /// nothing. A drag that selected nothing shows nothing.
+    static func content(text: String, isEditable: Bool, offersPaste: Bool) -> Content {
+        if !text.isEmpty { return text.count <= maximumLength ? .selection : .nothing }
+        return offersPaste && isEditable ? .paste : .nothing
     }
 
     /// The tools the person keeps on the bar. The ENABLED set is stored, so a

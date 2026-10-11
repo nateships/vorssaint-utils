@@ -28,6 +28,11 @@ enum SelectionBarTools {
             return AppFeature.urlCleaner.isAvailable
         case "selection.shelf":
             return AppFeature.shelf.isAvailable && UserDefaults.standard.bool(forKey: DefaultsKey.shelfEnabled)
+        case "pastePlain":
+            return AppFeature.pastePlain.isAvailable
+        case "clipboardHistory":
+            return AppFeature.clipboardHistory.isAvailable
+                && UserDefaults.standard.bool(forKey: DefaultsKey.clipboardHistoryEnabled)
         default:
             return true
         }
@@ -46,6 +51,10 @@ enum SelectionBarTools {
         case "selection.titleCase": return Tool(id: id, title: bar.selectionTitleCase, symbol: "textformat")
         case "selection.shelf": return Tool(id: id, title: bar.selectionShelf, symbol: "tray.full")
         case "selection.count": return Tool(id: id, title: bar.selectionCount, symbol: "number")
+        case "paste": return Tool(id: id, title: strings.paste, symbol: "doc.on.clipboard")
+        case "pastePlain": return Tool(id: id, title: L10n.shared.s.pastePlainName, symbol: "doc.plaintext")
+        case "clipboardHistory":
+            return Tool(id: id, title: FeatureStrings.clipboard(language).title, symbol: "clock.arrow.circlepath")
         default: return Tool(id: id, title: id, symbol: "questionmark")
         }
     }
