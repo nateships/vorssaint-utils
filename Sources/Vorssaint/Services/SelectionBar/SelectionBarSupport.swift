@@ -34,11 +34,14 @@ enum SelectionBarSupport {
         return rect.width < 20_000 && rect.height < 20_000
     }
 
-    /// True when the release point is on or near the selection. When the app
-    /// gives no geometry, the selection is accepted.
-    static func isCurrent(release: CGPoint, selection: CGRect?) -> Bool {
+    /// True when the press or the release point is on or near the selection.
+    /// A drag past the end of a line releases far from the text, but it
+    /// starts on the text. When the app gives no geometry, the selection is
+    /// accepted.
+    static func isCurrent(release: CGPoint, press: CGPoint? = nil, selection: CGRect?) -> Bool {
         guard let selection, isUsable(selection) else { return true }
-        return selection.insetBy(dx: -staleTolerance, dy: -staleTolerance).contains(release)
+        let near = selection.insetBy(dx: -staleTolerance, dy: -staleTolerance)
+        return near.contains(release) || press.map(near.contains) == true
     }
 
     /// The command bar rows the selection bar does not show. The bar has its

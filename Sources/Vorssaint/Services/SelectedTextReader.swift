@@ -62,7 +62,9 @@ enum SelectedTextReader {
         // through the marker range.
         let bounds = markerRange.flatMap { markerBounds(focused, $0) }
             ?? selectedBounds(focused)
-            ?? copyValue(focused, "AXSelectedTextMarkerRange").flatMap { markerBounds(focused, $0) }
+            ?? (markerRange == nil
+                ? copyValue(focused, "AXSelectedTextMarkerRange").flatMap { markerBounds(focused, $0) }
+                : nil)
         // A terminal says its value can be set, but typed text goes to the
         // prompt, not over the selection. A text field also lets the selection
         // range be set; a terminal does not.

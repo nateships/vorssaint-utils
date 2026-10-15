@@ -50,7 +50,12 @@ final class SelectionBarService {
     }
 
     private func handle(_ event: NSEvent) {
-        let location = NSEvent.mouseLocation
+        // The place of the event, not of the pointer now: the monitor can run
+        // after the pointer moved on. Quartz puts the origin at the top left
+        // of the main display.
+        let mainHeight = NSScreen.screens.first?.frame.height ?? 0
+        let location = event.cgEvent.map { CGPoint(x: $0.location.x, y: mainHeight - $0.location.y) }
+            ?? NSEvent.mouseLocation
         if event.type == .leftMouseDown {
             pressLocation = location
             generation += 1
@@ -62,14 +67,15 @@ final class SelectionBarService {
                                                      down: pressLocation,
                                                      up: location,
                                                      includesClicks: clicksOpen) else { return }
+        let press = pressLocation
         let expected = generation
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.readDelay) { [weak self] in
             guard let self, expected == self.generation else { return }
-            self.read(release: location, expected: expected)
+            self.read(press: press, release: location, expected: expected)
         }
     }
 
-    private func read(release: CGPoint, expected: Int) {
+    private func read(press: CGPoint?, release: CGPoint, expected: Int) {
         guard let front = NSWorkspace.shared.frontmostApplication,
               front.processIdentifier != getpid(),
               !MouseAppExceptions.shared.excludes(.selectionBar, app: front) else { return }
@@ -78,12 +84,12 @@ final class SelectionBarService {
             let selection = SelectedTextReader.read(processID: processID, details: true)
             DispatchQueue.main.async {
                 guard expected == self.generation, let selection else { return }
-                self.present(selection, release: release)
+                self.present(selection, press: press, release: release)
             }
         }
     }
 
-    private func present(_ selection: SelectedTextReader.Selection, release: CGPoint) {
+    private func present(_ selection: SelectedTextReader.Selection, press: CGPoint?, release: CGPoint) {
         let text = selection.text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard SelectionBarSupport.shows(text) else { return }
 
@@ -96,8 +102,11 @@ final class SelectionBarService {
             ScreenshotSupport.cocoaRect(fromWindowServer: $0, mainScreenHeight: mainHeight)
         }
         let usableBounds = SelectionBarSupport.isUsable(bounds) ? bounds : nil
-        guard SelectionBarSupport.isCurrent(release: release, selection: usableBounds ?? element) else { return }
-        panel.show(enabled(selectionActions(for: text, exact: selection.text, isEditable: selection.isEditable)),
+        guard SelectionBarSupport.isCurrent(release: release, press: press,
+                                            selection: usableBounds ?? element) else { return }
+        let actions = selectionActions(for: text, exact: selection.text, isEditable: selection.isEditable,
+                                       typesOver: !selection.fromTextMarkers)
+        panel.show(enabled(actions),
                    selection: usableBounds,
                    pointer: release,
                    visible: visibleFrame(containing: release))
@@ -119,12 +128,14 @@ final class SelectionBarService {
     }
 
     /// `exact` is the selection as the app holds it. The case rows type over
-    /// it and keep its spaces and line breaks.
+    /// it and keep its spaces and line breaks. `typesOver` is false for a web
+    /// page read through a text marker range, as in the command bar.
     private func selectionActions(for text: String, exact: String,
-                                  isEditable: Bool) -> [SelectionBarAction] {
+                                  isEditable: Bool, typesOver: Bool) -> [SelectionBarAction] {
         let copy = action("copy") { _ = TransientPaste.shared.forwardCopy() }
         let rows = CommandBarCatalog.selectionEntries(text,
                                                       exactly: exact,
+                                                      typesOver: typesOver,
                                                       bar: FeatureStrings.commandBar(L10n.shared.language),
                                                       useInSearch: { _ in })
             .filter { SelectionBarSupport.offers($0.id, isEditable: isEditable) }

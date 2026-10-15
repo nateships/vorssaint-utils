@@ -58,6 +58,11 @@ enum PointerInputFeatureTests {
                      "selection bar: a release at the end of the selection keeps it")
         suite.expect(!SelectionBarSupport.isCurrent(release: CGPoint(x: 900, y: 900), selection: selected),
                      "selection bar: a release far from an old selection does not show the bar")
+        suite.expect(SelectionBarSupport.isCurrent(release: CGPoint(x: 900, y: 405), press: CGPoint(x: 200, y: 405),
+                                                   selection: selected)
+                        && !SelectionBarSupport.isCurrent(release: CGPoint(x: 900, y: 900),
+                                                          press: CGPoint(x: 900, y: 600), selection: selected),
+                     "selection bar: a drag that starts on the text and ends past the line keeps the selection")
         suite.expect(SelectionBarSupport.isCurrent(release: CGPoint(x: 900, y: 900), selection: nil)
                         && SelectionBarSupport.isCurrent(release: CGPoint(x: 900, y: 900), selection: .zero),
                      "selection bar: apps without geometry still show the bar")
